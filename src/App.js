@@ -1,23 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import './ChatApp.css';
+
+// Rest of the component code...
 
 function App() {
+  const [messages, setMessages] = useState([]);
+
+  const handleUserMessage = (e) => {
+    e.preventDefault();
+    const userInput = e.target.message.value;
+    if (userInput.trim() !== '') {
+      setMessages([...messages, { sender: 'user', text: userInput }]);
+      e.target.message.value = '';
+    }
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Chatbot Example</h1>
+      <div className="chat-container">
+        <div className="messages">
+          {messages.map((message, index) => (
+            <div
+              key={index}
+              className={`message ${message.sender === 'user' ? 'user' : 'bot'}`}
+            >
+              {message.text}
+            </div>
+          ))}
+        </div>
+        <form className="user-input" onSubmit={handleUserMessage}>
+          <input type="text" name="message" placeholder="Type your message..." />
+          <button type="submit">Send</button>
+        </form>
+      </div>
     </div>
   );
 }
